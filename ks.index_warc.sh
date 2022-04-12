@@ -8,7 +8,7 @@ echo "indexing warc file $warcfile in collection $coll"
 pywb_basedir=/opt/pywb
 collections=$pywb_basedir/collections
 warcbase=`basename $warcfile`
-if [ -f $collections/$coll/archive/$warcbase ]; then
+if [ -L $collections/$coll/archive/$warcbase ]; then
   rm $collections/$coll/archive/$warcbase
 fi
 ln -s $warcfile $collections/$coll/archive/$warcbase
