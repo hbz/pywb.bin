@@ -22,13 +22,15 @@ fi
 if [ -n "$index_cdxj_bak" ]; then
   echo "index.cdxj gab es schon; temporär umbenannt nach $index_cdxj_bak"
 fi
-dataverz=/data2/wpull-data
+#dataverz=/data/edoweb-test/wpull-data
+dataverz=/data/wpull-data
 cd $dataverz
 for warcfile in edoweb:*/20*/*.warc.gz ; do
   echo "warcfile=$dataverz/$warcfile"
   /opt/pywb/bin/ks.index_warc.sh $coll $dataverz/$warcfile
 done
-dataverz=/data2/cdn-data
+#dataverz=/data/edoweb-test/cdn-data
+dataverz=/data/cdn-data
 cd $dataverz
 for warcfile in edoweb_cdn:*/20*/*.warc.gz ; do
   echo "warcfile=$dataverz/$warcfile"

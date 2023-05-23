@@ -9,8 +9,9 @@
 # | Ingolf Kuss      | 07.04.2022 | Neuanlage                               |
 # +------------------+------------+-----------------------------------------+
 coll=lesesaal
-data_basedir=/data2
+# data_basedir=/data2
 # data_basedir=/data/edoweb-test  # für wayback-test
+data_basedir=/data
 happengroesse=10000000000 # Dateigröße in Byte
 # happengroesse=2000000000 # Dateigröße in Byte
 pywb_basedir=/opt/pywb
