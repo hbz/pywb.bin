@@ -4,10 +4,11 @@ Autor: I. Kuss
 Erstanlagedatum: 29.Januar 2020  
 
 # Einrichtung
-ssh wayback@wayback
-cd /opt/pywb
-git clone https://github.com/edoweb/pywb-scripts.git bin  
-
+```bash
+$ ssh wayback@wayback
+$ cd /opt/pywb
+$ git clone https://github.com/hbz/pywb.bin.git bin  
+```
 # i.) Erstmaliges Hinzufügen von Webinhalten zu Python-Wayback Index & Archiv
 #     Gesamtindexierung des vorhandenen Bestandes
 
