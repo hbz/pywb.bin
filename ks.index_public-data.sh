@@ -23,18 +23,24 @@ if [ -n "$index_cdxj_bak" ]; then
   echo "index.cdxj gab es schon; temporär umbenannt nach $index_cdxj_bak"
 fi
 # dataverz=/data/edoweb-test/public-data
-dataverz=/data/public-data
+#dataverz=/data/public-data
+dataverz=/opt/toscience/public-data
 cd $dataverz
 for warcfile in edoweb:*/20*/*.warc.gz edoweb:*/20*/warcs/*.warc.gz; do
-  echo "warcfile=$dataverz/$warcfile"
-  /opt/pywb/bin/ks.index_warc.sh $coll $dataverz/$warcfile
+  if [ -f $dataverz/$warcfile ]; then
+    echo "warcfile=$dataverz/$warcfile"
+    /opt/pywb/bin/ks.index_warc.sh $coll $dataverz/$warcfile
+  fi
 done
 # dataverz=/data/edoweb-test/cdn-data
-dataverz=/data/cdn-data
+# dataverz=/data/cdn-data
+dataverz=/opt/toscience/cdn-data
 cd $dataverz
 for warcfile in edoweb_cdn:*/20*/*.warc.gz ; do
-  echo "warcfile=$dataverz/$warcfile"
-  /opt/pywb/bin/ks.index_warc.sh $coll $dataverz/$warcfile
+  if [ -f $dataverz/$warcfile ]; then
+    echo "warcfile=$dataverz/$warcfile"
+    /opt/pywb/bin/ks.index_warc.sh $coll $dataverz/$warcfile
+  fi
 done
 echo "neuen Index index.cdxj aufgebaut"
 # Umbenennung der Sicherungskopie

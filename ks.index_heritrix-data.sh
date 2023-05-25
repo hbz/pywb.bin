@@ -21,11 +21,13 @@ if [ -n "$index_cdxj_bak" ]; then
   echo "index.cdxj gab es schon; temporär umbenannt nach $index_cdxj_bak"
 fi
 # dataverz=/data/edoweb-test/heritrix-data
-dataverz=/data/heritrix-data
+dataverz=/opt/toscience/heritrix-data
 cd $dataverz
 for warcfile in edoweb:*/20*/warcs/*.warc.gz ; do
-  echo "warcfile=$dataverz/$warcfile"
-  /opt/pywb/bin/ks.index_warc.sh $coll $dataverz/$warcfile
+  if [ -f $dataverz/$warcfile ]; then
+    echo "warcfile=$dataverz/$warcfile"
+    /opt/pywb/bin/ks.index_warc.sh $coll $dataverz/$warcfile
+  fi
 done
 # Umbenennung des Index
 cd $collection/indexes

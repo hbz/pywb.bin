@@ -18,8 +18,8 @@
 
 #data_basedir=/data/edoweb-test
 #data_basedir=/data2
-#data_basedir=/opt/toscience
-data_basedir=/data
+#data_basedir=/data
+data_basedir=/opt/toscience
 #happengroesse=10000000000 # Dateigröße in Byte
 happengroesse=2000000000 # Dateigröße in Byte
 #happengroesse=1000000000 # Dateigröße in Byte
@@ -49,6 +49,10 @@ function update_collection {
   cd $dataverz
   for warcfile in $suchmuster ; do
     # echo "warcfile=$dataverz/$warcfile" >> $logfile
+    if [ "$warcfile" = "$suchmuster" ]; then
+      # echo "Sammlung $archivename, Verzeichnis $dataverz: keine WARC-Datei gefunden."
+      break
+    fi
     warcbase=`basename $warcfile`
     # Gibt es schon einen gleichnamigen symbolischen Link im Archiv ?
     if [ -f $archive/$warcbase ]; then
@@ -143,7 +147,8 @@ update_collection $data_basedir/cdn-data "edoweb_cdn:*/20*/*.warc.gz" weltweit $
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" >> $logfile
 echo "START auto-indexing new public harvests (soft links)" >> $logfile
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" >> $logfile
-update_collection $data_basedir/public-data "edoweb:*/20*/*.warc.gz edoweb:*/20*/warcs/*.warc.gz" weltweit $archive_weltweit
+update_collection $data_basedir/public-data "edoweb:*/20*/*.warc.gz" weltweit $archive_weltweit
+update_collection $data_basedir/public-data "edoweb:*/20*/warcs/*.warc.gz" weltweit $archive_weltweit
 
 echo "********************************************************************************" >> $logfile
 echo `date`

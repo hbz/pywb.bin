@@ -16,15 +16,18 @@ $ git clone https://github.com/hbz/pywb.bin.git bin
 Neuaufbau der pywb-Sammlung "Lesesaal"  
 ssh wayback@wayback  
 Löschen der Sammlung "Lesesaal"  
-cd /opt/pywb/bin/  
+cd /opt/pywb
+. venv/bin/activate
+cd bin
 ./ks.remove_collection.sh lesesaal  
 Neuanlage der Sammlung "Lesesaal"  
 cd /opt/pywb  
-/opt/pywb/Python3/bin/wb-manager init lesesaal  
+wb-manager init lesesaal  
 
 Aufteilung auf multiple Indizes in der Sammlung "lesesaal"  
 1. Index:   index.cdxj       enthält: wpull-data, cdn-data  
    Neuerzeugung des Index:  
+   cd /opt/pywb/bin
    ./ks.index_wpull-data.sh lesesaal  >> /opt/pywb/logs/ks.index_wpull-data.log  
 2. Index:   index_htrx.cdxj  enthält: heritrix-data  
    Neuerzeugung des Index:  
@@ -35,13 +38,13 @@ Aufteilung auf multiple Indizes in der Sammlung "lesesaal"
 
 # II. Weltweit-Sammlung
 Neuaufbau der pywb-Sammlung "Weltweit"  
-ssh wayback@wayback2  
+ssh wayback@wayback  
 Löschen der Sammlung "Weltweit"  
 cd /opt/pywb/bin/  
 ./ks.remove_collection.sh weltweit  
 Neuanlage der Sammlung "Weltweit"  
 cd /opt/pywb  
-/opt/pywb/Python3/bin/wb-manager init weltweit  
+wb-manager init weltweit  
 
 Ein Index:  index.cdxj       enthält: public-data, cdn-data  
     ACHTUNG !! Die Verzeichnisse  
@@ -50,6 +53,7 @@ Ein Index:  index.cdxj       enthält: public-data, cdn-data
     /data2/wpull-data,     /data2/heritrix-data     bzw. /data2/wget-data  ,  
    weil die Links in /data2/public-data darauf verweisen !  
    Neuerzeugung des Index:  
+   cd /opt/pywb/bin
    ./ks.index_public-data.sh weltweit  >> /opt/pywb/logs/ks.index_public-data.log  
 
 # ii.) Automatischer Update des Index und der Sammlung der Archivdateien für neu hinzugekommene oder aktualisierte Crawl-Vorgänge
