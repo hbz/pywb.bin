@@ -20,8 +20,8 @@
 #data_basedir=/data2
 #data_basedir=/data
 data_basedir=/opt/toscience
-#happengroesse=10000000000 # Dateigröße in Byte
-happengroesse=2000000000 # Dateigröße in Byte
+happengroesse=10000000000 # Dateigröße in Byte
+#happengroesse=2000000000 # Dateigröße in Byte
 #happengroesse=1000000000 # Dateigröße in Byte
 pywb_basedir=/opt/pywb
 collections=$pywb_basedir/collections

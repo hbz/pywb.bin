@@ -14,7 +14,7 @@ fi
 ln -s $warcfile $collections/$coll/archive/$warcbase
 actdir=$PWD
 cd $pywb_basedir
-wb-manager index $coll $collections/$coll/archive/$warcbase
+/opt/pywb/Python3/bin/wb-manager index $coll $collections/$coll/archive/$warcbase
 cd $actdir
 
 exit 0
