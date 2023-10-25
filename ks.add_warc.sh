@@ -10,7 +10,7 @@ warcbase=`basename $warcfile`
 actdir=$PWD
 cd $pywb_basedir
 /opt/pywb/Python3/bin/wb-manager add $coll $warcfile
-if [ -L $collections/$coll/archive/$warcbase ]; then
+if [ -f $collections/$coll/archive/$warcbase ]; then
   rm $collections/$coll/archive/$warcbase
 fi
 ln -s $warcfile $collections/$coll/archive/$warcbase
