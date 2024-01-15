@@ -8,9 +8,8 @@
 # +------------------+------------+-----------------------------------------+
 # | Ingolf Kuss      | 07.04.2022 | Neuanlage                               |
 # +------------------+------------+-----------------------------------------+
-coll=lesesaal
-data_basedir=/data2
-# data_basedir=/data/edoweb-test  # für wayback-test
+coll=wayback
+data_basedir=/data
 happengroesse=10000000000 # Dateigröße in Byte
 # happengroesse=2000000000 # Dateigröße in Byte
 pywb_basedir=/opt/pywb
@@ -100,19 +99,19 @@ echo "$akt_partial_number Backup-Teilindexe angelegt." >> $logfile
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" >> $logfile
 echo "START auto-indexing new wpull harvests" >> $logfile
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" >> $logfile
-index_basedir $data_basedir/wpull-data "edoweb:*/20*/*.warc.gz"
+index_basedir $data_basedir/wpull-data "*:*/20*/*.warc.gz"
 
 # 2. heritrix-data
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" >> $logfile
 echo "START auto-indexing new heritrix harvests" >> $logfile
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" >> $logfile
-index_basedir $data_basedir/heritrix-data "edoweb:*/20*/warcs/*.warc.gz"
+index_basedir $data_basedir/heritrix-data "*:*/20*/warcs/*.warc.gz"
 
 # 3. cdn-data
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" >> $logfile
 echo "START auto-indexing new cdn harvests in restricted access collection" >> $logfile
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" >> $logfile
-index_basedir $data_basedir/cdn-data "edoweb_cdn:*/20*/*.warc.gz"
+index_basedir $data_basedir/cdn-data "*:*/20*/*.warc.gz"
 
 # Nach erfolgreicher Reindexierung:
 # Umbenennung (und dadurch Deaktivierung) des gesicherten alten Indexes

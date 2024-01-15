@@ -7,7 +7,7 @@
 # Das Skript erwartet die Angabe der maximalen Größe in MB.
 #
 # Aufruf in monit Konfiguration mit absoluten Pfaden
-# $ /opt/pywb/bin/check_pywb_indexsize.sh -i /opt/pywb/collections/weltweit/indexes/index.cdxj -m 10000 -l weltweit.log
+# $ /opt/pywb/bin/check_pywb_indexsize.sh -i /opt/pywb/collections/wayback/indexes/index.cdxj -m 10000 -l wayback.log
 
 usage() { echo "Usage: $0 [-i <pywb index>] [-m <max size in MB>] [-l <logfile>]" 1>&2; exit 1; }
 

@@ -1,6 +1,6 @@
 #!/bin/bash
 # Fügt eine WARC-Datei zu einer bestehenden Sammlung hinzu.
-# Beispielaufruf: $0 lesesaal /data2/cdn-data/edoweb_cdn:29/20190708/WEB-strato-editor.com-slideshow-common.css-20190708.warc.gz
+# Beispielaufruf: $0 wayback /data/wpull-data/<NAMESPACE>:1/20240101/WEB-mysite.com-20240101.warc.gz
 coll=$1
 warcfile=$2
 echo "adding warc file $warcfile to collection $coll"

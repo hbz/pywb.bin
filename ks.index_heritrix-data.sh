@@ -1,7 +1,7 @@
 #!/bin/bash
 # Fügt alle heritrix-data zu einer Sammlung hinzu. Legt dazu den Index index_htrx.cdxj an.
 # Dazu wird wb-manager index benutzt.
-# Beispielaufruf: ./ks.index_heritrix-data.sh lesesaal
+# Beispielaufruf: ./ks.index_heritrix-data.sh wayback
 echo "********************************************************************************"
 echo `date`
 echo "START Initially indexing all heritrix-data in Collection $coll"
@@ -20,10 +20,9 @@ fi
 if [ -n "$index_cdxj_bak" ]; then
   echo "index.cdxj gab es schon; temporär umbenannt nach $index_cdxj_bak"
 fi
-# dataverz=/data/edoweb-test/heritrix-data
-dataverz=/opt/toscience/heritrix-data
+dataverz=/data/heritrix-data
 cd $dataverz
-for warcfile in edoweb:*/20*/warcs/*.warc.gz ; do
+for warcfile in *:*/20*/warcs/*.warc.gz ; do
   if [ -f $dataverz/$warcfile ]; then
     echo "warcfile=$dataverz/$warcfile"
     /opt/pywb/bin/ks.index_warc.sh $coll $dataverz/$warcfile
