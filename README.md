@@ -59,10 +59,10 @@ wb-manager init public
 
 Ein Index:  index.cdxj       enthält: public-data, cdn-data  
     ACHTUNG !! Die Verzeichnisse  
-    /opt/regal/wpull-data, /opt/regal/heritrix-data und /opt/regal/wget-data  
+    /opt/toscience/wpull-data, /opt/toscience/heritrix-data und /opt/toscience/wget-data  
     müssen auf dem wayback-Server eingerichtet sein, jeweils als symbolische Verknüpfungen zu  
-    /data2/wpull-data,     /data2/heritrix-data     bzw. /data2/wget-data  ,  
-   weil die Links in /data2/public-data darauf verweisen !  
+    /data/wpull-data,     /data/heritrix-data     bzw. /data/wget-data  ,  
+   weil die Links in /data/public-data darauf verweisen !  
    Neuerzeugung des Index:  
    cd /opt/pywb/bin
    # Das muss eigentlich auch noch häppchenweise geschehen !! Z.Zt. 20,6 GB groß
