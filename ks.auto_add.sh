@@ -52,9 +52,14 @@ function update_collection {
       break
     fi
     warcbase=`basename $warcfile`
-    # Gibt es schon einen gleichnamigen symbolischen Link im Archiv ?
+    # Gibt es schon eine gleichnamige Datei oder einen gleichnamigen symbolischen Link im Archiv ?
     if [ -f $archive/$warcbase ]; then
       # echo "Archivfile existiert" >> $logfile
+      # Wenn es kein symbolischer Link ist, ist es eine echte Datei.
+      # In diesem Falle ist noch ein Indexierungsjob bei der Arbeit und es darf kein weiterer angestoßen werden.
+      if [ ! -h $archive/$warcbase ]; then
+        continue
+      fi
       # Ist das Archivfile neuer ?
       if test `find $archive/$warcbase -prune -newer $dataverz/$warcfile`; then
         # echo "Archivfile ist neuer. Nichts zu tun." >> $logfile
