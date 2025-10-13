@@ -70,8 +70,8 @@ Ein Index:  index.cdxj       enthält: public-data, cdn-data
    cd /opt/pywb/bin
    # Das muss eigentlich auch noch häppchenweise geschehen !! Z.Zt. 20,6 GB groß
    ./ks.index_public-data.sh weltweit  >> /opt/pywb/logs/ks.index_public-data.log  
-    # läuft seit Mittwoch, 18.Oktober, 18:13 Uhr.
-    # fertig Sonntag, 22. Oktober, 04:10 Uhr.
+    # läuft seit Mittwoch, 18.Oktober, 18:24 Uhr.
+    # fertig Sonnabend, 21. Oktober, 14:55 Uhr.
 
 # ii.) Automatischer Update des Index und der Sammlung der Archivdateien für neu hinzugekommene oder aktualisierte Crawl-Vorgänge
 Achtung: Funktioniert nicht für gelöschte Crawl-Archive !  

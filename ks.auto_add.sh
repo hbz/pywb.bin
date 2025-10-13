@@ -94,8 +94,7 @@ function rename_large_index {
       last_index_nr=${BASH_REMATCH[1]}  	
     fi
     echo "Last index no: $last_index_nr"  >> $logfile
-    next_happen_nummer=$last_index_nr
-    ((next_happen_nummer++))
+    next_happen_nummer=`echo "$last_index_nr + 1" | bc`
     echo "Next index no: $next_happen_nummer"  >> $logfile
     # Aktuellen Index umbenennen nach printf("index%02d.cdxj", $next_happen_nummer)
     printf -v newIndexName 'index%02d.cdxj' $next_happen_nummer
@@ -111,6 +110,7 @@ function rename_large_index {
 # I.1. Ggfs. Umbenennung des aktuellen Index, falls dieser schon zu groß ist
 #      Es wird dann automatisch ein neuer Index index.cdxj begonnen.
 rename_large_index lesesaal
+rename_large_index weltweit
 
 # I.2 Neuindexierung der neu hinzu gekommenen WARC-Archive in der Lesesaal-Sammlung
 # i. wpull-data
