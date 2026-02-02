@@ -19,7 +19,7 @@ pywb_basedir=/opt/pywb
 collections=$pywb_basedir/collections
 collection=$collections/$coll
 coll_archive=$collection/archive
-logfile=$pwyb_basedir/logs/ks.reindex_haeppchenweise.`date +'%Y%m%d%H%M%S'`.log
+logfile=$pywb_basedir/logs/ks.reindex_haeppchenweise.`date +'%Y%m%d%H%M%S'`.log
 next_happen_nummer=1
 echo "********************************************************************************" >> $logfile
 echo `date`
@@ -75,6 +75,7 @@ function index_basedir {
 ### BEGINN Hauptverarbeitung ###
 if [ "$coll" != "lesesaal" ] && [ "$coll" != "wayback" ] && [ "$coll" != "weltweit" ] && [ "$coll" != "public" ]; then
   echo "ERROR: Indexname \"$coll\" nicht bekannt! Keine Aktionen." >> $logfile
+  echo "ERROR: Indexname \"$coll\" nicht bekannt! Keine Aktionen."
   cd $actdir
   exit 0
 fi
@@ -108,7 +109,7 @@ echo "$akt_partial_number Backup-Teilindexe angelegt." >> $logfile
 # *******************************
 # Beginn der Neuindexierung
 # *******************************
-if [ "$coll" = "lesesaal" ] || [ "$coll" = "wayback" ]; then
+if [[ "$coll" == "lesesaal" || "$coll" == "wayback" ]]; then
   # Index mit eingeschränkter Zugriffsberechtigung (Lesesaal) neu aufbauen
   # 1. wget-data
   echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" >> $logfile
@@ -140,7 +141,7 @@ if [ "$coll" = "lesesaal" ] || [ "$coll" = "wayback" ]; then
   echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" >> $logfile
   index_basedir $data_basedir/btrix-data "edoweb:*/20*/archive/*.warc.gz"
   
-else if [ "$coll" = "weltweit" ] || [ "$coll" = "public" ]; then
+elif [[ "$coll" == "weltweit" || "$coll" == "public" ]]; then
   # Öffentlich zugänglichen Index neu aufbauen
   # 1. public-data
   echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" >> $logfile
