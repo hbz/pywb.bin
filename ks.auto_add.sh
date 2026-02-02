@@ -57,6 +57,11 @@ function update_collection {
     # Gibt es schon einen gleichnamigen symbolischen Link im Archiv ?
     if [ -f $archive/$warcbase ]; then
       # echo "Archivfile existiert" >> $logfile
+      # Wenn es kein symbolischer Link ist, ist es eine echte Datei.
+      # In diesem Falle ist noch ein Indexierungsjob bei der Arbeit und es darf kein weiterer angestoßen werden.
+      if [ ! -h $archive/$warcbase ]; then
+        continue
+      fi
       # Ist das Archivfile neuer ?
       if test `find $archive/$warcbase -prune -newer $dataverz/$warcfile`; then
         # echo "Archivfile ist neuer. Nichts zu tun." >> $logfile
@@ -117,19 +122,19 @@ rename_large_index lesesaal
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" >> $logfile
 echo "START auto-indexing new wpull harvests" >> $logfile
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" >> $logfile
-update_collection $data_basedir/wpull-data "edoweb:*/20*/*.warc.gz" lesesaal $archive_lesesaal
+update_collection $data_basedir/wpull-data "*:*/20*/*.warc.gz" wayback $archive_lesesaal
 
 # ii. heritrix-data
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" >> $logfile
 echo "START auto-indexing new heritrix harvests" >> $logfile
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" >> $logfile
-update_collection $data_basedir/heritrix-data "edoweb:*/20*/warcs/*.warc.gz" lesesaal $archive_lesesaal
+update_collection $data_basedir/heritrix-data "*:*/20*/warcs/*.warc.gz" wayback $archive_lesesaal
 
 # iii. cdn-data
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" >> $logfile
 echo "START auto-indexing new cdn harvests in restricted access collection" >> $logfile
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" >> $logfile
-update_collection $data_basedir/cdn-data "edoweb_cdn:*/20*/*.warc.gz" lesesaal $archive_lesesaal
+update_collection $data_basedir/cdn-data "*:*/20*/*.warc.gz" wayback $archive_lesesaal
 
 # II. Weltweit-Sammlung
 # II.1. Ggfs. Umbenennung des aktuellen Index, falls dieser schon zu groß ist
@@ -141,14 +146,14 @@ rename_large_index weltweit
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" >> $logfile
 echo "START auto-indexing new cdn harvests in public collection" >> $logfile
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" >> $logfile
-update_collection $data_basedir/cdn-data "edoweb_cdn:*/20*/*.warc.gz" weltweit $archive_weltweit
+update_collection $data_basedir/cdn-data "*:*/20*/*.warc.gz" weltweit $archive_weltweit
 
 # ii. public-data
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" >> $logfile
 echo "START auto-indexing new public harvests (soft links)" >> $logfile
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" >> $logfile
-update_collection $data_basedir/public-data "edoweb:*/20*/*.warc.gz" weltweit $archive_weltweit
-update_collection $data_basedir/public-data "edoweb:*/20*/warcs/*.warc.gz" weltweit $archive_weltweit
+update_collection $data_basedir/public-data "*:*/20*/*.warc.gz" weltweit $archive_weltweit
+update_collection $data_basedir/public-data "*:*/20*/warcs/*.warc.gz" weltweit $archive_weltweit
 
 echo "********************************************************************************" >> $logfile
 echo `date`

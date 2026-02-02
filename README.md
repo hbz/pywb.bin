@@ -26,9 +26,9 @@ cd /opt/pywb
 wb-manager init lesesaal  
 
 Aufteilung auf multiple Indizes in der Sammlung "lesesaal"  
-    Die Verzeichnisse  
+    Die Verzeichnisse
     /opt/toscience/wpull-data, /opt/toscience/heritrix-data, /opt/toscience/cdn-data  und /opt/toscience/public-data
-    müssen auf dem wayback-Server eingerichtet sein, jeweils als symbolische Verknüpfungen zu  
+    müssen auf dem wayback-Server eingerichtet sein, jeweils als symbolische Verknüpfungen zu
     /data2/wpull-data,     /data2/heritrix-data     , /data2/cdn-data  bzw. /data2/public-data,
    weil die Skripte so konfiguriert sind ($data_basedir in ks.auto_add.sh, $dataverz in ks.index_*-data.sh).
 # 1. Index:   index.cdxj       enthält: wpull-data, cdn-data  
@@ -62,14 +62,14 @@ wb-manager init weltweit
 
 Ein Index:  index.cdxj       enthält: public-data, cdn-data  
     ACHTUNG !! Die Verzeichnisse  
-    /opt/regal/wpull-data, /opt/regal/heritrix-data und /opt/regal/wget-data  
+    /opt/regal/wpull-data, /opt/regal/heritrix-data und /opt/regal/wget-data
     müssen auf dem wayback-Server eingerichtet sein, jeweils als symbolische Verknüpfungen zu  
-    /data2/wpull-data,     /data2/heritrix-data     bzw. /data2/wget-data  ,  
-   weil die Links in /data2/public-data darauf verweisen !  
+    /data2/wpull-data,     /data2/heritrix-data     bzw. /data2/wget-data  ,
+   weil die Links in /data2/public-data darauf verweisen !
    Neuerzeugung des Index:  
    cd /opt/pywb/bin
    # Das muss eigentlich auch noch häppchenweise geschehen !! Z.Zt. 20,6 GB groß
-   ./ks.index_public-data.sh weltweit  >> /opt/pywb/logs/ks.index_public-data.log  
+   ./ks.index_public-data.sh weltweit  >> /opt/pywb/logs/ks.index_public-data.log
     # läuft seit Mittwoch, 18.Oktober, 18:13 Uhr.
     # fertig Sonntag, 22. Oktober, 04:10 Uhr.
 

@@ -23,7 +23,7 @@ fi
 # dataverz=/data/edoweb-test/heritrix-data
 dataverz=/opt/toscience/heritrix-data
 cd $dataverz
-for warcfile in edoweb:*/20*/warcs/*.warc.gz ; do
+for warcfile in *:*/20*/warcs/*.warc.gz ; do
   if [ -f $dataverz/$warcfile ]; then
     echo "warcfile=$dataverz/$warcfile"
     /opt/pywb/bin/ks.index_warc.sh $coll $dataverz/$warcfile
