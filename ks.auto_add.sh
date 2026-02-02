@@ -115,7 +115,6 @@ function rename_large_index {
 # I.1. Ggfs. Umbenennung des aktuellen Index, falls dieser schon zu groß ist
 #      Es wird dann automatisch ein neuer Index index.cdxj begonnen.
 rename_large_index lesesaal
-rename_large_index weltweit
 
 # I.2 Neuindexierung der neu hinzu gekommenen WARC-Archive in der Lesesaal-Sammlung
 # i. wpull-data
