@@ -3,6 +3,11 @@
 # Fügt auch alle cdn-data hinzu.
 # Dazu wird wb-manager index benutzt.
 # Beispielaufruf: ./ks.index_public-data.sh weltweit
+# +------------------+------------+-----------------------------------------------------------------+
+# | Autor            | Datum      | Grund                                                           |
+# +------------------+------------+-----------------------------------------------------------------+
+# | Ingolf Kuss      | 13.10.2023 | Neuanlage für Erstindexierung auf edoweb2                       |
+# +------------------+------------+-----------------------------------------------------------------+
 echo "********************************************************************************"
 echo `date`
 echo "START Initially indexing all public-data and cdn-data in Collection $coll"

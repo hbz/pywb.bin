@@ -1,23 +1,25 @@
 #!/bin/bash
 # Baut index.cdxj neu auf. Aber in Häppchen zu je 10 GB.
 # Die einzelnen Teilindexe werden index01.cdxj, index02.cdxj, ... genannt; der letzte (< 10 GB) index.cdxj
-# Hier: indexiert wpull-data, heritrix-data und cdn-data in der Lesesaal-Sammlung neu.
 # *** ACHTUNG ! Während der des Neuaufbaus MUSS der auto-Indexer in der Crontab ausgeschaltet sein !!! ***
-# +------------------+------------+-----------------------------------------+
-# | Autor            | Datum      | Grund                                   |
-# +------------------+------------+-----------------------------------------+
-# | Ingolf Kuss      | 07.04.2022 | Neuanlage                               |
-# +------------------+------------+-----------------------------------------+
-coll=lesesaal
+# *** es ist jedoch keine Downtime nötig, da die alten Indexe temporär umbenannt werden und solange weiter aktiv sind,
+#     bis die neuen Indexe fertig sind ***
+# Beispielaufruf: ./ks.index_public-data.sh weltweit
+# +------------------+------------+-----------------------------------------------------------------+
+# | Autor            | Datum      | Grund                                                           |
+# +------------------+------------+-----------------------------------------------------------------+
+# | Ingolf Kuss      | 07.04.2022 | Neuanlage für die Erstindexierung auf edoweb-test2              |
+# | Ingolf Kuss      | 02.02.2026 | Editiert für Re-Indexierung häppchenweise auf edoweb2, TOS-1347 |
+# +------------------+------------+-----------------------------------------------------------------+
+coll=$1
 data_basedir=/data2
 # data_basedir=/data/edoweb-test  # für wayback-test
 happengroesse=10000000000 # Dateigröße in Byte
-# happengroesse=2000000000 # Dateigröße in Byte
 pywb_basedir=/opt/pywb
 collections=$pywb_basedir/collections
 collection=$collections/$coll
 coll_archive=$collection/archive
-logfile=$pywb_basedir/logs/ks.reindex_haeppchenweise.sh.log
+logfile=$pwyb_basedir/logs/ks.reindex_haeppchenweise.`date +'%Y%m%d%H%M%S'`.log
 next_happen_nummer=1
 echo "********************************************************************************" >> $logfile
 echo `date`
@@ -31,41 +33,51 @@ actdir=$PWD
 
 # bash-Funktionen
 function index_basedir {
-  # Indexiert alle Webarchivdateien eines Verzeichnisses (z.B. wpull-data/)
+  # Indexiert alle Webarchivdateien eines Verzeichnisses (z.B. public-data/)
   #  in einem pywb-Archiv und einem pywb-Teilindex (indexNN.cdxj)
   local dataverz=$1;
   local suchmuster=$2;
   # Schleife über alle im Datenverzeichnis angelegten WARC-Dateien
   cd $dataverz
   for warcfile in $suchmuster ; do
-    # echo "warcfile=$dataverz/$warcfile" >> $logfile
-    warcbase=`basename $warcfile`
-    # Gibt es schon einen gleichnamigen symbolischen Link im Archiv ?
-    if [ -f $coll_archive/$warcbase ]; then
-      # Archivfile (symbolischer Link) löschen
-      rm $coll_archive/$warcbase
+    if [ -f $dataverz/$warcfile ]; then
+      # echo "warcfile=$dataverz/$warcfile" >> $logfile
+      warcbase=`basename $warcfile`
+      # Gibt es schon einen gleichnamigen symbolischen Link im Archiv ?
+      if [ -f $coll_archive/$warcbase ]; then
+        # Archivfile (symbolischer Link) löschen
+        rm $coll_archive/$warcbase
+      fi
+      # Archivfile immer neu indexieren
+      echo "Warcfile=$dataverz/$warcfile wird hinzugefügt." >> $logfile
+      # Prüfen, ob der index index.cdxj schon größer als die Häppchengröße ist.
+      cd $collection/indexes
+      size=0
+      if [ -f "index.cdxj" ]; then
+        for word in `du -b index.cdxj`; do size=$word; break; done
+      fi
+      if [ $size -gt $happengroesse ]; then
+        # Index umbenennen nach printf("index%02d.cdxj", $next_happen_nummer)
+        printf -v newIndexName 'index%02d.cdxj' $next_happen_nummer
+        mv index.cdxj $newIndexName
+        echo "neu aufgebauten Teilindex umbenannt nach $newIndexName" >> $logfile
+        ((next_happen_nummer++))
+      fi
+      cd $dataverz
+      # und neuen Index anfangen (das sollte von selber geschehen)
+      # WARC-Datei zu index.cdxj hinzufügen
+      /opt/pywb/bin/ks.index_warc.sh $coll $dataverz/$warcfile >> $logfile
     fi
-    # Archivfile immer neu indexieren
-    echo "Warcfile=$dataverz/$warcfile wird hinzugefügt." >> $logfile
-    # Prüfen, ob der index index.cdxj schon größer als die Häppchengröße ist.
-    cd $collection/indexes
-    size=0
-    if [ -f "index.cdxj" ]; then
-      for word in `du -b index.cdxj`; do size=$word; break; done
-    fi
-    if [ $size -gt $happengroesse ]; then
-      # Index umbenennen nach printf("index%02d.cdxj", $next_happen_nummer)
-      printf -v newIndexName 'index%02d.cdxj' $next_happen_nummer
-      mv index.cdxj $newIndexName
-      echo "neu aufgebauten Teilindex umbenannt nach $newIndexName" >> $logfile
-      ((next_happen_nummer++))
-    fi
-    cd $dataverz
-    # und neuen Index anfangen (das sollte von selber geschehen)
-    # WARC-Datei zu index.cdxj hinzufügen
-    /opt/pywb/bin/ks.index_warc.sh $coll $dataverz/$warcfile >> $logfile
   done
   }
+# ENDE Bash-Funktionen
+
+### BEGINN Hauptverarbeitung ###
+if [ "$coll" != "lesesaal" ] && [ "$coll" != "wayback" ] && [ "$coll" != "weltweit" ] && [ "$coll" != "public" ]; then
+  echo "ERROR: Indexname \"$coll\" nicht bekannt! Keine Aktionen." >> $logfile
+  cd $actdir
+  exit 0
+fi
 
 # Aktuellen Index index.cdxj temporär umbenennen
 cd $collection/indexes
@@ -96,23 +108,52 @@ echo "$akt_partial_number Backup-Teilindexe angelegt." >> $logfile
 # *******************************
 # Beginn der Neuindexierung
 # *******************************
-# 1. wpull-data
-echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" >> $logfile
-echo "START auto-indexing new wpull harvests" >> $logfile
-echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" >> $logfile
-index_basedir $data_basedir/wpull-data "edoweb:*/20*/*.warc.gz"
+if [ "$coll" = "lesesaal" ] || [ "$coll" = "wayback" ]; then
+  # Index mit eingeschränkter Zugriffsberechtigung (Lesesaal) neu aufbauen
+  # 1. wget-data
+  echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" >> $logfile
+  echo "START auto-indexing wget harvests" >> $logfile
+  echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" >> $logfile
+  index_basedir $data_basedir/heritrix-data "edoweb:*/20*/warcs/*.warc.gz"
+  
+  # 2. heritrix-data
+  echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" >> $logfile
+  echo "START auto-indexing heritrix harvests" >> $logfile
+  echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" >> $logfile
+  index_basedir $data_basedir/heritrix-data "edoweb:*/20*/warcs/*.warc.gz"
 
-# 2. heritrix-data
-echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" >> $logfile
-echo "START auto-indexing new heritrix harvests" >> $logfile
-echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" >> $logfile
-index_basedir $data_basedir/heritrix-data "edoweb:*/20*/warcs/*.warc.gz"
+  # 3. wpull-data
+  echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" >> $logfile
+  echo "START auto-indexing wpull harvests" >> $logfile
+  echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" >> $logfile
+  index_basedir $data_basedir/wpull-data "edoweb:*/20*/*.warc.gz"
 
-# 3. cdn-data
-echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" >> $logfile
-echo "START auto-indexing new cdn harvests in restricted access collection" >> $logfile
-echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" >> $logfile
-index_basedir $data_basedir/cdn-data "edoweb_cdn:*/20*/*.warc.gz"
+  # 4. cdn-data
+  echo "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" >> $logfile
+  echo "START auto-indexing cdn harvests in restricted access collection" >> $logfile
+  echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" >> $logfile
+  index_basedir $data_basedir/cdn-data "edoweb_cdn:*/20*/*.warc.gz"
+
+  # 5. btrix-data
+  echo "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" >> $logfile
+  echo "START auto-indexing browsertrix harvests in restricted access collection" >> $logfile
+  echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" >> $logfile
+  index_basedir $data_basedir/btrix-data "edoweb:*/20*/archive/*.warc.gz"
+  
+else if [ "$coll" = "weltweit" ] || [ "$coll" = "public" ]; then
+  # Öffentlich zugänglichen Index neu aufbauen
+  # 1. public-data
+  echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" >> $logfile
+  echo "START auto-indexing public harvests in public access collection" >> $logfile
+  echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" >> $logfile
+  index_basedir $data_basedir/public-data "edoweb:*/20*/*.warc.gz edoweb:*/20*/*/*.warc.gz"
+
+  # 2. cdn-data
+  echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" >> $logfile
+  echo "START auto-indexing cdn harvests in public access collection" >> $logfile
+  echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" >> $logfile
+  index_basedir $data_basedir/cdn-data "edoweb_cdn:*/20*/*.warc.gz"
+fi
 
 # Nach erfolgreicher Reindexierung:
 # Umbenennung (und dadurch Deaktivierung) des gesicherten alten Indexes
@@ -121,7 +162,7 @@ if [ -n "$index_cdxj_bak" ]; then
   echo "Schon vorhandenen und umbenannten Index $index_cdxj_bak nach index.cdxj.$datetimestamp umbenannt und dadurch deaktiviert." >> $logfile
 fi
 
-# Auch alle alten Teilindexe umbenennen und dadurch Deaktivieren
+# Auch alle alten Teilindexe umbenennen und dadurch deaktivieren
 index_partial_bak=""
 akt_partial_number=1;
 printf -v index_partial_bak "index%02d.$datetimestamp.cdxj" $akt_partial_number
