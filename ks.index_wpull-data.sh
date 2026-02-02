@@ -26,7 +26,7 @@ fi
 #dataverz=/data/wpull-data
 dataverz=/opt/toscience/wpull-data
 cd $dataverz
-for warcfile in edoweb:*/20*/*.warc.gz ; do
+for warcfile in *:*/20*/*.warc.gz ; do
   if [ -f $dataverz/$warcfile ]; then
     echo "warcfile=$dataverz/$warcfile"
     /opt/pywb/bin/ks.index_warc.sh $coll $dataverz/$warcfile
@@ -36,7 +36,7 @@ done
 #dataverz=/data/cdn-data
 dataverz=/opt/toscience/cdn-data
 cd $dataverz
-for warcfile in edoweb_cdn:*/20*/*.warc.gz ; do
+for warcfile in *:*/20*/*.warc.gz ; do
   if [ -f $dataverz/$warcfile ]; then
     echo "warcfile=$dataverz/$warcfile"
     /opt/pywb/bin/ks.index_warc.sh $coll $dataverz/$warcfile

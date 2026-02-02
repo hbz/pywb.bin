@@ -3,6 +3,11 @@
 # Fügt auch alle cdn-data hinzu.
 # Dazu wird wb-manager index benutzt.
 # Beispielaufruf: ./ks.index_public-data.sh weltweit
+# +------------------+------------+-----------------------------------------------------------------+
+# | Autor            | Datum      | Grund                                                           |
+# +------------------+------------+-----------------------------------------------------------------+
+# | Ingolf Kuss      | 13.10.2023 | Neuanlage für Erstindexierung auf edoweb2                       |
+# +------------------+------------+-----------------------------------------------------------------+
 echo "********************************************************************************"
 echo `date`
 echo "START Initially indexing all public-data and cdn-data in Collection $coll"
@@ -26,7 +31,7 @@ fi
 #dataverz=/data/public-data
 dataverz=/opt/toscience/public-data
 cd $dataverz
-for warcfile in edoweb:*/20*/*.warc.gz edoweb:*/20*/warcs/*.warc.gz; do
+for warcfile in *:*/20*/*.warc.gz *:*/20*/warcs/*.warc.gz; do
   if [ -f $dataverz/$warcfile ]; then
     echo "warcfile=$dataverz/$warcfile"
     /opt/pywb/bin/ks.index_warc.sh $coll $dataverz/$warcfile
@@ -36,7 +41,7 @@ done
 # dataverz=/data/cdn-data
 dataverz=/opt/toscience/cdn-data
 cd $dataverz
-for warcfile in edoweb_cdn:*/20*/*.warc.gz ; do
+for warcfile in *:*/20*/*.warc.gz ; do
   if [ -f $dataverz/$warcfile ]; then
     echo "warcfile=$dataverz/$warcfile"
     /opt/pywb/bin/ks.index_warc.sh $coll $dataverz/$warcfile
