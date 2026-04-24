@@ -70,9 +70,21 @@ function update_collection {
       rm $archive/$warcbase
     fi
     # Archivfile exsitiert noch nicht oder ist älter
-    echo "warcfile=$dataverz/$warcfile" >> $logfile
-    echo "Warcfile wird hinzugefügt." >> $logfile
-    /opt/pywb/bin/ks.add_warc.sh $archivename $dataverz/$warcfile >> $logfile
+    echo "Archivdatei=$dataverz/$warcfile" >> $logfile
+    echo "Archivdatei wird hinzugefügt." >> $logfile
+    if [[ "$warcbase" =~ ^(.*)\.wacz$ ]]; then
+      echo "wacz-Datei gefunden. Wird ausgepackt." >> $logfile
+      warcpath=${warcfile%/*}
+      cd $dataverz/$warcpath
+      unzip $warcbase
+      rm $warcbase
+      rm archive/*-screenshots-*.warc.gz
+      rm archive/*-text-*.warc.gz
+      cd $dataverz
+    else
+      /opt/pywb/bin/ks.add_warc.sh $archivename $dataverz/$warcfile >> $logfile
+    fi
+
   done
 }
 
@@ -97,8 +109,7 @@ function rename_large_index {
       last_index_nr=${BASH_REMATCH[1]}  	
     fi
     echo "Last index no: $last_index_nr"  >> $logfile
-    next_happen_nummer=$last_index_nr
-    ((next_happen_nummer++))
+    next_happen_nummer=`echo "$last_index_nr + 1" | bc`
     echo "Next index no: $next_happen_nummer"  >> $logfile
     # Aktuellen Index umbenennen nach printf("index%02d.cdxj", $next_happen_nummer)
     printf -v newIndexName 'index%02d.cdxj' $next_happen_nummer
@@ -128,7 +139,14 @@ echo "START auto-indexing new heritrix harvests" >> $logfile
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" >> $logfile
 update_collection $data_basedir/heritrix-data "*:*/20*/warcs/*.warc.gz" wayback $archive_lesesaal
 
-# iii. cdn-data
+# iii. browsertrix-data
+echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" >> $logfile
+echo "START auto-indexing new brosertrix harvests in restricted access collection" >> $logfile
+echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" >> $logfile
+update_collection $data_basedir/btrix-data "*:*/20*/*.wacz" wayback $archive_lesesaal
+update_collection $data_basedir/brrix-data "*:*/20*/archive/*.warc.gz" wayback $archive_lesesaal
+
+# iv. cdn-data
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" >> $logfile
 echo "START auto-indexing new cdn harvests in restricted access collection" >> $logfile
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" >> $logfile
@@ -152,6 +170,9 @@ echo "START auto-indexing new public harvests (soft links)" >> $logfile
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" >> $logfile
 update_collection $data_basedir/public-data "*:*/20*/*.warc.gz" public $archive_weltweit
 update_collection $data_basedir/public-data "*:*/20*/warcs/*.warc.gz" public $archive_weltweit
+update_collection $data_basedir/public-data "*:*/20*/*.wacz" public $archive_weltweit
+update_collection $data_basedir/public-data "*:*/20*/archive/*.warc.gz" public $archive_weltweit
+
 
 echo "********************************************************************************" >> $logfile
 echo `date`
