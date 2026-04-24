@@ -2,7 +2,7 @@
 # Fügt alle wpull-data zu einer Sammlung hinzu. Legt dazu den Index index.cdxj (neu) an.
 # Fügt auch alle cdn-data hinzu.
 # Dazu wird wb-manager index benutzt.
-# Beispielaufruf: ./ks.index_wpull-data.sh wayback
+# Beispielaufruf: ./ks.index_wpull-data.sh lesesaal
 echo "********************************************************************************"
 echo `date`
 echo "START Initially indexing all wpull-data and cdn-data in Collection $coll"
@@ -22,7 +22,9 @@ fi
 if [ -n "$index_cdxj_bak" ]; then
   echo "index.cdxj gab es schon; temporär umbenannt nach $index_cdxj_bak"
 fi
-dataverz=/data/wpull-data
+#dataverz=/data/edoweb-test/wpull-data
+#dataverz=/data/wpull-data
+dataverz=/opt/toscience/wpull-data
 cd $dataverz
 for warcfile in *:*/20*/*.warc.gz ; do
   if [ -f $dataverz/$warcfile ]; then
@@ -30,7 +32,9 @@ for warcfile in *:*/20*/*.warc.gz ; do
     /opt/pywb/bin/ks.index_warc.sh $coll $dataverz/$warcfile
   fi
 done
-dataverz=/data/cdn-data
+#dataverz=/data/edoweb-test/cdn-data
+#dataverz=/data/cdn-data
+dataverz=/opt/toscience/cdn-data
 cd $dataverz
 for warcfile in *:*/20*/*.warc.gz ; do
   if [ -f $dataverz/$warcfile ]; then

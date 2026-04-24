@@ -16,15 +16,17 @@
 # Aktualisiert index.cdxj. Maximale Indexgröße 10 GB (Größe anpassbar in der Shell-Variable 'happengroesse').
 # Die einzelnen Teilindexe werden index01.cdxj, index02.cdxj, ... genannt; der letzte (< 10 GB) index.cdxj
 
-data_basedir=/data
-#data_basedir=/opt/toscience
+#data_basedir=/data/edoweb-test
+#data_basedir=/data2
+#data_basedir=/data
+data_basedir=/opt/toscience
 happengroesse=10000000000 # Dateigröße in Byte
 #happengroesse=2000000000 # Dateigröße in Byte
 #happengroesse=1000000000 # Dateigröße in Byte
 pywb_basedir=/opt/pywb
 collections=$pywb_basedir/collections
-archive_lesesaal=$collections/wayback/archive
-archive_weltweit=$collections/public/archive
+archive_lesesaal=$collections/lesesaal/archive
+archive_weltweit=$collections/weltweit/archive
 logfile=$pywb_basedir/logs/ks.auto_add.log
 echo "" >> $logfile
 echo "********************************************************************************" >> $logfile
@@ -52,7 +54,7 @@ function update_collection {
       break
     fi
     warcbase=`basename $warcfile`
-    # Gibt es schon eine gleichnamige Datei oder einen gleichnamigen symbolischen Link im Archiv ?
+    # Gibt es schon einen gleichnamigen symbolischen Link im Archiv ?
     if [ -f $archive/$warcbase ]; then
       # echo "Archivfile existiert" >> $logfile
       # Wenn es kein symbolischer Link ist, ist es eine echte Datei.
@@ -124,20 +126,20 @@ function rename_large_index {
 # I. Lesesaal-Sammlung
 # I.1. Ggfs. Umbenennung des aktuellen Index, falls dieser schon zu groß ist
 #      Es wird dann automatisch ein neuer Index index.cdxj begonnen.
-rename_large_index wayback
+rename_large_index lesesaal
 
 # I.2 Neuindexierung der neu hinzu gekommenen WARC-Archive in der Lesesaal-Sammlung
 # i. wpull-data
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" >> $logfile
 echo "START auto-indexing new wpull harvests" >> $logfile
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" >> $logfile
-update_collection $data_basedir/wpull-data "*:*/20*/*.warc.gz" wayback $archive_lesesaal
+update_collection $data_basedir/wpull-data "*:*/20*/*.warc.gz" lesesaal $archive_lesesaal
 
 # ii. heritrix-data
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" >> $logfile
 echo "START auto-indexing new heritrix harvests" >> $logfile
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" >> $logfile
-update_collection $data_basedir/heritrix-data "*:*/20*/warcs/*.warc.gz" wayback $archive_lesesaal
+update_collection $data_basedir/heritrix-data "*:*/20*/warcs/*.warc.gz" lesesaal $archive_lesesaal
 
 # iii. browsertrix-data
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" >> $logfile
@@ -150,29 +152,28 @@ update_collection $data_basedir/brrix-data "*:*/20*/archive/*.warc.gz" wayback $
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" >> $logfile
 echo "START auto-indexing new cdn harvests in restricted access collection" >> $logfile
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" >> $logfile
-update_collection $data_basedir/cdn-data "*:*/20*/*.warc.gz" wayback $archive_lesesaal
+update_collection $data_basedir/cdn-data "*:*/20*/*.warc.gz" lesesaal $archive_lesesaal
 
 # II. Weltweit-Sammlung
 # II.1. Ggfs. Umbenennung des aktuellen Index, falls dieser schon zu groß ist
 #       Es wird dann automatisch ein neuer Index index.cdxj begonnen.
-rename_large_index public
+rename_large_index weltweit
 
 # II.2 Neuindexierung der neu hinzu gekommenen WARC-Archive in der Weltweit-Sammlung
 # i. cdn-data
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" >> $logfile
 echo "START auto-indexing new cdn harvests in public collection" >> $logfile
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" >> $logfile
-update_collection $data_basedir/cdn-data "*:*/20*/*.warc.gz" public $archive_weltweit
+update_collection $data_basedir/cdn-data "*:*/20*/*.warc.gz" weltweit $archive_weltweit
 
 # ii. public-data
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" >> $logfile
 echo "START auto-indexing new public harvests (soft links)" >> $logfile
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" >> $logfile
-update_collection $data_basedir/public-data "*:*/20*/*.warc.gz" public $archive_weltweit
-update_collection $data_basedir/public-data "*:*/20*/warcs/*.warc.gz" public $archive_weltweit
-update_collection $data_basedir/public-data "*:*/20*/*.wacz" public $archive_weltweit
-update_collection $data_basedir/public-data "*:*/20*/archive/*.warc.gz" public $archive_weltweit
-
+update_collection $data_basedir/public-data "*:*/20*/*.warc.gz" weltweit $archive_weltweit
+update_collection $data_basedir/public-data "*:*/20*/warcs/*.warc.gz" weltweit $archive_weltweit
+update_collection $data_basedir/public-data "*:*/20*/*.wacz" weltweit $archive_weltweit
+update_collection $data_basedir/public-data "*:*/20*/archive/*.warc.gz" weltweit $archive_weltweit
 
 echo "********************************************************************************" >> $logfile
 echo `date`

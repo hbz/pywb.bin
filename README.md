@@ -3,7 +3,6 @@ Skripte, um Web-Inhalte in pywb zu importieren.
 Autor: I. Kuss  
 Erstanlagedatum  : 29.Januar 2020  
 Änderung / Grund : 13.10.2023 / Erstindexierung auf tardis-01
-Änderung / Grund : 15.01.2024 / Ersteinrichtung nwweb-test
 
 # Einrichtung
 ```bash
@@ -21,20 +20,24 @@ Löschen der Sammlung "Lesesaal"
 cd /opt/pywb
 . Python3/bin/activate
 cd bin
-./ks.remove_collection.sh wayback  
+./ks.remove_collection.sh lesesaal  
 Neuanlage der Sammlung "Lesesaal"  
 cd /opt/pywb  
-wb-manager init wayback  
+wb-manager init lesesaal  
 
 Aufteilung auf multiple Indizes in der Sammlung "lesesaal"  
-  mkdir /opt/pywb/logs
+    Die Verzeichnisse
+    /opt/toscience/wpull-data, /opt/toscience/heritrix-data, /opt/toscience/cdn-data  und /opt/toscience/public-data
+    müssen auf dem wayback-Server eingerichtet sein, jeweils als symbolische Verknüpfungen zu
+    /data2/wpull-data,     /data2/heritrix-data     , /data2/cdn-data  bzw. /data2/public-data,
+   weil die Skripte so konfiguriert sind ($data_basedir in ks.auto_add.sh, $dataverz in ks.index_*-data.sh).
 # 1. Index:   index.cdxj       enthält: wpull-data, cdn-data  
 #    Neuerzeugung des Index:  
 #    cd /opt/pywb/bin
-#    ./ks.index_wpull-data.sh wayback  >> /opt/pywb/logs/ks.index_wpull-data.log  
+#    ./ks.index_wpull-data.sh lesesaal  >> /opt/pywb/logs/ks.index_wpull-data.log  
 # 2. Index:   index_htrx.cdxj  enthält: heritrix-data  
 #   Neuerzeugung des Index:  
-#   ./ks.index_heritrix-data.sh wayback  >> /opt/pywb/logs/ks.index_heritrix-data.log  
+#   ./ks.index_heritrix-data.sh lesesaal  >> /opt/pywb/logs/ks.index_heritrix-data.log  
 1.+2. zusammenfassen und häppchenweise ausführen ! (z.Zt. 7 * 10 GB groß!):
    Index: index.cdxj   enthält: wpull-data, heritrix-data, cdn-data
     Neuerzeugung des Index:  
@@ -45,28 +48,28 @@ Aufteilung auf multiple Indizes in der Sammlung "lesesaal"
     # fertig Dienstag, 17. Oktober, 23:05 Uhr.
 3. Index:   index_wget.cdxj  enthält: wget-data  
    Neuerzeugung des Index:  
-   ./ks.index_wget-data.sh wayback  >> /opt/pywb/logs/ks.index_wget-data.log  
+   ./ks.index_wget-data.sh lesesaal  >> /opt/pywb/logs/ks.index_wget-data.log  
 
 # II. Weltweit-Sammlung
 Neuaufbau der pywb-Sammlung "Weltweit"  
 ssh wayback@tardis-01  
 Löschen der Sammlung "Weltweit"  
 cd /opt/pywb/bin/  
-./ks.remove_collection.sh public  
+./ks.remove_collection.sh weltweit  
 Neuanlage der Sammlung "Weltweit"  
 cd /opt/pywb  
-wb-manager init public  
+wb-manager init weltweit  
 
 Ein Index:  index.cdxj       enthält: public-data, cdn-data  
     ACHTUNG !! Die Verzeichnisse  
-    /opt/toscience/wpull-data, /opt/toscience/heritrix-data und /opt/toscience/wget-data  
+    /opt/regal/wpull-data, /opt/regal/heritrix-data und /opt/regal/wget-data
     müssen auf dem wayback-Server eingerichtet sein, jeweils als symbolische Verknüpfungen zu  
-    /data/wpull-data,     /data/heritrix-data     bzw. /data/wget-data  ,  
-   weil die Links in /data/public-data darauf verweisen !  
+    /data2/wpull-data,     /data2/heritrix-data     bzw. /data2/wget-data  ,
+   weil die Links in /data2/public-data darauf verweisen !
    Neuerzeugung des Index:  
    cd /opt/pywb/bin
    # Das muss eigentlich auch noch häppchenweise geschehen !! Z.Zt. 20,6 GB groß
-   ./ks.index_public-data.sh public  >> /opt/pywb/logs/ks.index_public-data.log  
+   ./ks.index_public-data.sh weltweit  >> /opt/pywb/logs/ks.index_public-data.log
     # läuft seit Mittwoch, 18.Oktober, 18:13 Uhr.
     # fertig Sonntag, 22. Oktober, 04:10 Uhr.
 
