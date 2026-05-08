@@ -12,8 +12,9 @@
 # | Ingolf Kuss      | 02.02.2026 | Editiert für Re-Indexierung häppchenweise auf edoweb2, TOS-1347 |
 # +------------------+------------+-----------------------------------------------------------------+
 coll=$1
-data_basedir=/data2
-# data_basedir=/data/edoweb-test  # für wayback-test
+#data_basedir=/data2
+#data_basedir=/data/edoweb-test  # für wayback-test
+data_basedir=/opt/toscience
 happengroesse=10000000000 # Dateigröße in Byte
 pywb_basedir=/opt/pywb
 collections=$pywb_basedir/collections

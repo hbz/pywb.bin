@@ -21,7 +21,7 @@ fi
 if [ -n "$index_cdxj_bak" ]; then
   echo "index.cdxj gab es schon; temporär umbenannt nach $index_cdxj_bak"
 fi
-dataverz=/data2/wget-data
+dataverz=/opt/toscience/wget-data
 #dataverz=/data/wget-data
 cd $dataverz
 for warcfile in *:*/20*/warcs/*.warc.gz ; do
