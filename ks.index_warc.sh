@@ -2,6 +2,11 @@
 # Fügt eine WARC-Datei zu einer bestehenden Sammlung hinzu.
 # Benutze dafür wb-manager index
 # Beispielaufruf: $0 test_index /data2/cdn-data/edoweb_cdn:29/20190708/WEB-strato-editor.com-slideshow-common.css-20190708.warc.gz
+
+scriptdir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+cd $scriptdir
+source variables.conf
+
 coll=$1
 warcfile=$2
 echo "indexing warc file $warcfile in collection $coll"
@@ -14,7 +19,7 @@ fi
 ln -s $warcfile $collections/$coll/archive/$warcbase
 actdir=$PWD
 cd $pywb_basedir
-/opt/pywb/Python3/bin/wb-manager index $coll $collections/$coll/archive/$warcbase
+/opt/pywb/$python_env/bin/wb-manager index $coll $collections/$coll/archive/$warcbase
 cd $actdir
 
 exit 0

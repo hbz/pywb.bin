@@ -18,7 +18,7 @@ Neuaufbau der pywb-Sammlung "Lesesaal"
 ssh wayback@wayback  
 Löschen der Sammlung "Lesesaal"  
 cd /opt/pywb
-. Python3/bin/activate
+. venv/bin/activate
 cd bin
 ./ks.remove_collection.sh lesesaal  
 Neuanlage der Sammlung "Lesesaal"  
