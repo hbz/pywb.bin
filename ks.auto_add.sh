@@ -146,7 +146,7 @@ update_collection $data_basedir/heritrix-data "*:*/20*/warcs/*.warc.gz" $collect
 
 # iii. browsertrix-data
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" >> $logfile
-echo "START auto-indexing new brosertrix harvests in restricted access collection" >> $logfile
+echo "START auto-indexing new browsertrix harvests in restricted access collection" >> $logfile
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" >> $logfile
 update_collection $data_basedir/btrix-data "*:*/20*/*.wacz" $collection_restricted $archive_lesesaal
 update_collection $data_basedir/btrix-data "*:*/20*/archive/*.warc.gz" $collection_restricted $archive_lesesaal
@@ -155,7 +155,7 @@ update_collection $data_basedir/btrix-data "*:*/20*/archive/*.warc.gz" $collecti
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" >> $logfile
 echo "START auto-indexing new cdn harvests in restricted access collection" >> $logfile
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" >> $logfile
-update_collection $data_basedir/cdn-data "*:*/20*/*.warc.gz" $collection_restricted $archive_lesesaal
+update_collection $data_basedir/cdn-data "*:*/20*/*-cdn.warc.gz" $collection_restricted $archive_lesesaal
 
 # II. Weltweit-Sammlung
 # II.1. Ggfs. Umbenennung des aktuellen Index, falls dieser schon zu groß ist
@@ -167,7 +167,7 @@ rename_large_index $collection_public
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" >> $logfile
 echo "START auto-indexing new cdn harvests in public collection" >> $logfile
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" >> $logfile
-update_collection $data_basedir/cdn-data "*:*/20*/*.warc.gz" $collection_public $archive_weltweit
+update_collection $data_basedir/cdn-data "*:*/20*/*-cdn.warc.gz" $collection_public $archive_weltweit
 
 # ii. public-data
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" >> $logfile
